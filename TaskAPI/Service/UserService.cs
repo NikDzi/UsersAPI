@@ -90,7 +90,7 @@ namespace TaskAPI.Service
                    LastName = "Lastname",
                    Email = "SeededUser" + i + "@mail.com",
                    Status = "Default",
-                   UserName = "Username " + i,
+                   UserName = "8CharsRequired " + i,
                    Password = pass,
                    PermissionId = 1,
                    Permission=permission
