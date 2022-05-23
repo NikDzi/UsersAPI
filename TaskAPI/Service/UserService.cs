@@ -23,16 +23,17 @@ namespace TaskAPI.Service
             }
             _context.Users.Remove(userToRemove);
             _context.SaveChanges();
-            return _context.Users.ToList();
+            return GetAll();
         }
 
-        public List<User> GetAll()
-        {      // will populate database on startup if its empty
+        public List<User> GetAll(string? query=null, int currentPage=0, int itemsPerPage = 10)
+        {      // will populate database on first get call which is executed on angular app startup
             if (!_context.Users.Any())
             {
                 SeedDataBase();
             }
-            return _context.Users.ToList();
+            var queryable = _context.Users;
+            return queryable.Skip(currentPage * itemsPerPage).Take(itemsPerPage).ToList();
         }
 
         public User GetById(int id)
@@ -53,7 +54,7 @@ namespace TaskAPI.Service
             newUser.Permission = permission;
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            return _context.Users.ToList();
+            return GetAll();
         }
 
         public List<User> Update(int id, UserRequest item)
@@ -68,8 +69,7 @@ namespace TaskAPI.Service
             var permission = _context.Permissions.Find(item.PermissionId);
             updateUser.Permission = permission;
             _context.SaveChanges();
-            return _context.Users.ToList();
-
+            return GetAll();
         }
 
         public void SeedDataBase()

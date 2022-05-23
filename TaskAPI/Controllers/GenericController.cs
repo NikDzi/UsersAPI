@@ -21,9 +21,9 @@ namespace TaskAPI.Controllers
 
         // GET: api/<GenericController>
         [HttpGet]
-        public List<T> Get()
+        public List<T> Get(string? query=null, int currentPage= 0, int itemsPerPage = 10)
         {
-            return _genericService.GetAll();
+            return _genericService.GetAll(query,currentPage,itemsPerPage);
         }
 
         // GET api/<GenericController>/5
