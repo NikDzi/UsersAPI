@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using TaskAPI.Data;
+using TaskAPI.IService;
+using TaskAPI.Models;
+using TaskAPI.RequestModels;
+using TaskAPI.Service;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+builder.Services.AddScoped<IGenericService<User,UserRequest>, UserService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

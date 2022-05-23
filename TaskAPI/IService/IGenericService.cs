@@ -1,7 +1,11 @@
 ﻿namespace TaskAPI.IService
 {
-    public interface IGenericService<T>
+    public interface IGenericService<T,TRequest>
     {
-
+        List<T> GetAll();
+        T GetById(int id);
+        List<T> Insert(TRequest item);
+        List<T> Delete(int id);
+        List<T> Update(int id, TRequest item);
     }
 }
