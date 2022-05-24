@@ -1,4 +1,5 @@
 ﻿using TaskAPI.Data;
+using TaskAPI.Exceptions;
 using TaskAPI.IService;
 using TaskAPI.Models;
 using TaskAPI.RequestModels;
@@ -18,8 +19,8 @@ namespace TaskAPI.Service
         {
             var permissionToRemove = _context.Permissions.FirstOrDefault(x => x.Id == id);
             if (permissionToRemove == null)
-            {   // implement exception handler
-                return null;
+            {
+                throw new PermissionNotFoundException(id);
             }
             _context.Permissions.Remove(permissionToRemove);
             _context.SaveChanges();
@@ -40,8 +41,7 @@ namespace TaskAPI.Service
             var returnPermission = _context.Permissions.Find(id);
             if (returnPermission == null)
             {
-                //implement exception handler
-                return null;
+                throw new PermissionNotFoundException(id);
             }
             return returnPermission;
         }
@@ -59,8 +59,7 @@ namespace TaskAPI.Service
             var updatePermission = _context.Permissions.Find(id);
             if (updatePermission == null)
             {
-                //implement exception handler
-                return null;
+                throw new PermissionNotFoundException(id);
             }
             updatePermission.updatePermission(item);
             _context.SaveChanges();

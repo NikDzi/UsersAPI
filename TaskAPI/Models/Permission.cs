@@ -21,7 +21,7 @@ namespace TaskAPI.Models
         public void updatePermission(PermissionRequest permissionRequest)
         {
             Code = permissionRequest.Code;
-            Description=permissionRequest.Description;
+            Description = permissionRequest.Description;
         }
     }
 }

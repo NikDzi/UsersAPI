@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskAPI.IService;
-using TaskAPI.Models;
-using TaskAPI.RequestModels;
-using TaskAPI.Service;
+
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,7 +9,7 @@ namespace TaskAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenericController<T,TRequest> : ControllerBase where T : class where TRequest : class
+    public class GenericController<T, TRequest> : ControllerBase where T : class where TRequest : class
     {
         private IGenericService<T, TRequest> _genericService;
 
@@ -22,9 +20,9 @@ namespace TaskAPI.Controllers
 
         // GET: api/<GenericController>
         [HttpGet("{query}/{currentPage}/{itemsPerPage}")]
-        public List<T> GetAllPaginated(string? query=null, int currentPage= 0, int itemsPerPage = 10)
+        public List<T> GetAllPaginated(string? query = null, int currentPage = 0, int itemsPerPage = 10)
         {
-            return _genericService.GetAllPaginated(query,currentPage,itemsPerPage);
+            return _genericService.GetAllPaginated(query, currentPage, itemsPerPage);
         }
         [HttpGet]
         public List<T> GetAll()
@@ -49,7 +47,7 @@ namespace TaskAPI.Controllers
         [HttpPut("{id}")]
         public List<T> Put(int id, [FromBody] TRequest value)
         {
-            return _genericService.Update(id,value);
+            return _genericService.Update(id, value);
         }
 
         // DELETE api/<GenericController>/5

@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
+using TaskAPI.Exceptions;
 using TaskAPI.Models;
 
 namespace TaskAPI.Extensions
@@ -13,15 +13,20 @@ namespace TaskAPI.Extensions
             {
                 err.Run(async context =>
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
+                        context.Response.StatusCode = contextFeature.Error switch
+                        {
+                            NotFoundException => StatusCodes.Status404NotFound,
+                            _ => StatusCodes.Status500InternalServerError
+                        };
+
                         await context.Response.WriteAsync(new ErrorDetails
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error za testing purpose"
+                            Message = contextFeature.Error.Message
                         }.ToString());
                     }
                 });

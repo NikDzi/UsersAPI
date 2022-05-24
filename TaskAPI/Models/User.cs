@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
-using TaskAPI.RequestModels;
 using System.Text;
+using TaskAPI.RequestModels;
 namespace TaskAPI.Models
 {
     public class User

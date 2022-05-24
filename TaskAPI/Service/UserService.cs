@@ -1,11 +1,12 @@
 ﻿using TaskAPI.Data;
+using TaskAPI.Exceptions;
 using TaskAPI.IService;
 using TaskAPI.Models;
 using TaskAPI.RequestModels;
 
 namespace TaskAPI.Service
 {
-    public class UserService : IGenericService<User,UserRequest>
+    public class UserService : IGenericService<User, UserRequest>
     {
         private readonly DataContext _context;
 
@@ -18,8 +19,8 @@ namespace TaskAPI.Service
         {
             var userToRemove = _context.Users.FirstOrDefault(x => x.Id == id);
             if (userToRemove == null)
-            {   // implement exception handler
-                return null;
+            {
+                throw new UserNotFoundException(id);
             }
             _context.Users.Remove(userToRemove);
             _context.SaveChanges();
@@ -29,15 +30,13 @@ namespace TaskAPI.Service
         public List<User> GetAll()
         {      // will populate database on first get call which is executed on angular app startup
 
-            throw new Exception(" hardkodirana excepcija......");
-
             if (!_context.Users.Any())
             {
                 SeedDataBase();
             }
             return _context.Users.ToList();
         }
-        public List<User> GetAllPaginated(string? query=null, int currentPage=0, int itemsPerPage = 10)
+        public List<User> GetAllPaginated(string? query = null, int currentPage = 0, int itemsPerPage = 10)
         {      // will populate database on first get call which is executed on angular app startup
             if (!_context.Users.Any())
             {
@@ -49,11 +48,10 @@ namespace TaskAPI.Service
 
         public User GetById(int id)
         {
-            var returnUser= _context.Users.Find(id);
+            var returnUser = _context.Users.Find(id);
             if (returnUser == null)
             {
-                //implement exception handler
-                return null;
+                throw new UserNotFoundException(id);
             }
             return returnUser;
         }
@@ -62,7 +60,7 @@ namespace TaskAPI.Service
         {
             var newUser = new User(item);
             var permission = _context.Permissions.Find(item.PermissionId);
-            if (permission==null)
+            if (permission == null)
             {
                 permission = _context.Permissions.Find(1);
             }
@@ -77,7 +75,7 @@ namespace TaskAPI.Service
             var updateUser = _context.Users.Find(id);
             if (updateUser == null)
             {
-                //make exception
+                throw new UserNotFoundException(id);
             }
             updateUser.updateUser(item);
             var permission = _context.Permissions.Find(item.PermissionId);
@@ -98,16 +96,16 @@ namespace TaskAPI.Service
             var permission = _context.Permissions.Find(1);
             for (int i = 1; i < 25; i++)
             {
-                var seededUser = new User() { 
-                
-                   FirstName = "SeededUser " + i,
-                   LastName = "Lastname",
-                   Email = "SeededUser" + i + "@mail.com",
-                   Status = "Default",
-                   UserName = "8CharsRequired " + i,
-                   Password = pass,
-                   PermissionId = 1,
-                   Permission=permission
+                var seededUser = new User()
+                {
+                    FirstName = "SeededUser " + i,
+                    LastName = "Lastname",
+                    Email = "SeededUser" + i + "@mail.com",
+                    Status = "Default",
+                    UserName = "8CharsRequired " + i,
+                    Password = pass,
+                    PermissionId = 1,
+                    Permission = permission
                 };
                 _context.Add(seededUser);
             }
