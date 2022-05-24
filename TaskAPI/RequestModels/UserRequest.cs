@@ -12,7 +12,7 @@ namespace TaskAPI.RequestModels
         [StringLength(20, MinimumLength = 8)]
         public string UserName { get; set; } = string.Empty;
         [Required]
-        [StringLength(30,MinimumLength =8)]
+        [MinLength(8)]
         public string Password { get; set; } = string.Empty;
         [Required]
         [EmailAddress]

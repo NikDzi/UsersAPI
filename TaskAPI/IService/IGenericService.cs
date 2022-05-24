@@ -2,7 +2,8 @@
 {
     public interface IGenericService<T,TRequest>
     {
-        List<T> GetAll(string? query=null,int currentPage=0,int itemsPerPage=10);
+        List<T> GetAll();
+        List<T> GetAllPaginated(string? query=null,int currentPage=0,int itemsPerPage=10);
         T GetById(int id);
         List<T> Insert(TRequest item);
         List<T> Delete(int id);

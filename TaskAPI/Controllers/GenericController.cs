@@ -4,6 +4,7 @@ using TaskAPI.Models;
 using TaskAPI.RequestModels;
 using TaskAPI.Service;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TaskAPI.Controllers
@@ -20,12 +21,16 @@ namespace TaskAPI.Controllers
         }
 
         // GET: api/<GenericController>
-        [HttpGet]
-        public List<T> Get(string? query=null, int currentPage= 0, int itemsPerPage = 10)
+        [HttpGet("{query}/{currentPage}/{itemsPerPage}")]
+        public List<T> GetAllPaginated(string? query=null, int currentPage= 0, int itemsPerPage = 10)
         {
-            return _genericService.GetAll(query,currentPage,itemsPerPage);
+            return _genericService.GetAllPaginated(query,currentPage,itemsPerPage);
         }
-
+        [HttpGet]
+        public List<T> GetAll()
+        {
+            return _genericService.GetAll();
+        }
         // GET api/<GenericController>/5
         [HttpGet("{id}")]
         public T Get(int id)

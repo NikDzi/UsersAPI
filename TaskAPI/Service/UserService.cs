@@ -26,7 +26,15 @@ namespace TaskAPI.Service
             return GetAll();
         }
 
-        public List<User> GetAll(string? query=null, int currentPage=0, int itemsPerPage = 10)
+        public List<User> GetAll()
+        {      // will populate database on first get call which is executed on angular app startup
+            if (!_context.Users.Any())
+            {
+                SeedDataBase();
+            }
+            return _context.Users.ToList();
+        }
+        public List<User> GetAllPaginated(string? query=null, int currentPage=0, int itemsPerPage = 10)
         {      // will populate database on first get call which is executed on angular app startup
             if (!_context.Users.Any())
             {
@@ -51,6 +59,10 @@ namespace TaskAPI.Service
         {
             var newUser = new User(item);
             var permission = _context.Permissions.Find(item.PermissionId);
+            if (permission==null)
+            {
+                permission = _context.Permissions.Find(1);
+            }
             newUser.Permission = permission;
             _context.Users.Add(newUser);
             _context.SaveChanges();
@@ -62,8 +74,7 @@ namespace TaskAPI.Service
             var updateUser = _context.Users.Find(id);
             if (updateUser == null)
             {
-                //implement exception handler
-                return null;
+                //make exception
             }
             updateUser.updateUser(item);
             var permission = _context.Permissions.Find(item.PermissionId);

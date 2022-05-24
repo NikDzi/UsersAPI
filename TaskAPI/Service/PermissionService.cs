@@ -25,8 +25,11 @@ namespace TaskAPI.Service
             _context.SaveChanges();
             return GetAll();
         }
-
-        public List<Permission> GetAll(string? query = null, int currentPage = 0, int itemsPerPage = 10)
+        public List<Permission> GetAll()
+        {
+            return _context.Permissions.ToList();
+        }
+        public List<Permission> GetAllPaginated(string? query = null, int currentPage = 0, int itemsPerPage = 10)
         {
             var queryable = _context.Permissions;
             return queryable.Skip(currentPage * itemsPerPage).Take(itemsPerPage).ToList();
