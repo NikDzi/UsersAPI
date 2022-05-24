@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TaskAPI.RequestModels;
 
 namespace TaskAPI.Models
 {
@@ -9,5 +10,18 @@ namespace TaskAPI.Models
         [StringLength(200)]
         public string Description { get; set; } = string.Empty;
 
+        public Permission(PermissionRequest item)
+        {
+            Code = item.Code;
+            Description = item.Description;
+        }
+        public Permission()
+        {
+        }
+        public void updatePermission(PermissionRequest permissionRequest)
+        {
+            Code = permissionRequest.Code;
+            Description=permissionRequest.Description;
+        }
     }
 }

@@ -6,7 +6,7 @@ using TaskAPI.Service;
 
 namespace TaskAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : GenericController<User,UserRequest>
     {

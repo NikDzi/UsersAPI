@@ -82,7 +82,7 @@ namespace TaskAPI.Service
             var salt = User.GenerateSalt();
             var pass = User.GenerateHash(salt, "password");
             var permission = _context.Permissions.Find(1);
-            for (int i = 0; i < 25; i++)
+            for (int i = 1; i < 25; i++)
             {
                 var seededUser = new User() { 
                 
