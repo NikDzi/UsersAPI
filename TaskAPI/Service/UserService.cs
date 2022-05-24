@@ -28,6 +28,9 @@ namespace TaskAPI.Service
 
         public List<User> GetAll()
         {      // will populate database on first get call which is executed on angular app startup
+
+            throw new Exception(" hardkodirana excepcija......");
+
             if (!_context.Users.Any())
             {
                 SeedDataBase();

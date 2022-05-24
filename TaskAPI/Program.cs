@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TaskAPI.Data;
+using TaskAPI.Extensions;
 using TaskAPI.IService;
 using TaskAPI.Models;
 using TaskAPI.RequestModels;
@@ -31,7 +32,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+app.ConfigureExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
