@@ -1,5 +1,7 @@
 # UsersAPI
 
+Front End repo : https://github.com/NikDzi/angular-fe-task
+
 API that returns a list of users with their permissions. Made with .net 6 and a MS SQL DB.
 
 How to run : 
