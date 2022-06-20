@@ -6,7 +6,7 @@ using TaskAPI.RequestModels;
 
 namespace TaskAPI.Service
 {
-    public class PermissionService : IGenericService<Permission, PermissionRequest>
+    public class PermissionService : IGenericService<Permission, PermissionRequest, LoginRequest>
     {
         private readonly DataContext _context;
 
@@ -52,6 +52,11 @@ namespace TaskAPI.Service
             _context.Permissions.Add(newPermission);
             _context.SaveChanges();
             return GetAll();
+        }
+
+        public string Login(LoginRequest item)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Permission> Update(int id, PermissionRequest item)

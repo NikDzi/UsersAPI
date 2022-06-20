@@ -11,8 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddScoped<IGenericService<User, UserRequest>, UserService>();
-builder.Services.AddScoped<IGenericService<Permission, PermissionRequest>, PermissionService>();
+builder.Services.AddScoped<IGenericService<User, UserRequest, LoginRequest>, UserService>();
+builder.Services.AddScoped<IGenericService<Permission, PermissionRequest, LoginRequest>, PermissionService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -14,6 +14,7 @@ namespace TaskAPI.Models
         public string Password { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public string Salt { get; set; } = string.Empty;
         public int PermissionId { get; set; }
         public Permission? Permission { get; set; }
 
@@ -25,8 +26,8 @@ namespace TaskAPI.Models
             Email = userRequest.Email;
             Status = userRequest.Status;
             PermissionId = userRequest.PermissionId;
-            var salt = GenerateSalt();
-            Password = GenerateHash(salt, Password);
+            Salt = GenerateSalt();
+            Password = GenerateHash(Salt, Password);
         }
 
         public User()
@@ -41,8 +42,8 @@ namespace TaskAPI.Models
             Email = userRequest.Email;
             Status = userRequest.Status;
             PermissionId = userRequest.PermissionId;
-            var salt = GenerateSalt();
-            Password = GenerateHash(salt, Password);
+            Salt = GenerateSalt();
+            Password = GenerateHash(Salt, Password);
         }
         public static string GenerateSalt()
         {

@@ -1,4 +1,7 @@
-﻿using TaskAPI.Data;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using TaskAPI.Data;
 using TaskAPI.Exceptions;
 using TaskAPI.IService;
 using TaskAPI.Models;
@@ -6,13 +9,15 @@ using TaskAPI.RequestModels;
 
 namespace TaskAPI.Service
 {
-    public class UserService : IGenericService<User, UserRequest>
+    public class UserService : IGenericService<User, UserRequest, LoginRequest>
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UserService(DataContext context)
+        public UserService(DataContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public List<User> Delete(int id)
@@ -34,6 +39,10 @@ namespace TaskAPI.Service
             {
                 SeedDataBase();
             }
+            User usr = _context.Users.FirstOrDefault();
+            var pass = usr.Password;
+            var generated = User.GenerateHash(usr.Salt, "password");
+            bool result = pass.SequenceEqual(generated);
             return _context.Users.ToList();
         }
         public List<User> GetAllPaginated(string? query = null, int currentPage = 0, int itemsPerPage = 10)
@@ -104,6 +113,7 @@ namespace TaskAPI.Service
                     Status = "Default",
                     UserName = "8CharsRequired " + i,
                     Password = pass,
+                    Salt=salt,
                     PermissionId = 1,
                     Permission = permission
                 };
@@ -141,6 +151,39 @@ namespace TaskAPI.Service
                 _context.Permissions.Add(item);
             }
             _context.SaveChanges();
+        }
+
+        public string Login(LoginRequest item)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserName.Equals(item.Username));
+            if (user == null)
+            {
+                throw new NotFoundException("Username does not exist");
+            }
+            var hash = User.GenerateHash(user.Salt, item.Password);
+            if (!user.Password.SequenceEqual(hash))
+            {
+                throw new BadRequestException("Wrong password");
+            }
+            var token = CreateToken(user); 
+            return token;
+        }
+
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim( ClaimTypes.Name,user.UserName)
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:token").Value));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials:cred);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
         }
     }
 }

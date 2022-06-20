@@ -9,11 +9,11 @@ namespace TaskAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenericController<T, TRequest> : ControllerBase where T : class where TRequest : class
+    public class GenericController<T, TRequest, Tlogin> : ControllerBase where T : class where TRequest : class where Tlogin : class
     {
-        private IGenericService<T, TRequest> _genericService;
+        private IGenericService<T, TRequest, Tlogin> _genericService;
 
-        public GenericController(IGenericService<T, TRequest> genericService)
+        public GenericController(IGenericService<T, TRequest, Tlogin> genericService)
         {
             _genericService = genericService;
         }
@@ -55,6 +55,12 @@ namespace TaskAPI.Controllers
         public List<T> Delete(int id)
         {
             return _genericService.Delete(id);
+        }
+
+        [HttpPost("login")]
+        public string Login([FromBody] Tlogin value)
+        {
+            return _genericService.Login(value);
         }
     }
 }
