@@ -113,7 +113,7 @@ namespace TaskAPI.Service
                     Status = "Default",
                     UserName = "8CharsRequired " + i,
                     Password = pass,
-                    Salt=salt,
+                    Salt = salt,
                     PermissionId = 1,
                     Permission = permission
                 };
@@ -165,15 +165,17 @@ namespace TaskAPI.Service
             {
                 throw new BadRequestException("Wrong password");
             }
-            var token = CreateToken(user); 
+            var token = CreateToken(user);
             return token;
         }
 
         private string CreateToken(User user)
         {
+            var role = _context.Permissions.Find(user.PermissionId);
             List<Claim> claims = new List<Claim>
             {
-                new Claim( ClaimTypes.Name,user.UserName)
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(ClaimTypes.Role,role.Code)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:token").Value));
@@ -181,7 +183,7 @@ namespace TaskAPI.Service
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
-                signingCredentials:cred);
+                signingCredentials: cred);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }

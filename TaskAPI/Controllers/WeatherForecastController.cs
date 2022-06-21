@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaskAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "U1")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
