@@ -1,4 +1,6 @@
-﻿using TaskAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using TaskAPI.Controllers;
+using TaskAPI.Data;
 using TaskAPI.Exceptions;
 using TaskAPI.IService;
 using TaskAPI.Models;
@@ -9,7 +11,6 @@ namespace TaskAPI.Service
     public class PermissionService : IGenericService<Permission, PermissionRequest, LoginRequest>
     {
         private readonly DataContext _context;
-
         public PermissionService(DataContext context)
         {
             _context = context;
@@ -70,6 +71,5 @@ namespace TaskAPI.Service
             _context.SaveChanges();
             return GetAll();
         }
-
     }
 }

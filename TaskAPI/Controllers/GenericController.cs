@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskAPI.IService;
 
 
@@ -24,7 +25,7 @@ namespace TaskAPI.Controllers
         {
             return _genericService.GetAllPaginated(query, currentPage, itemsPerPage);
         }
-        [HttpGet]
+        [HttpGet,Authorize]
         public List<T> GetAll()
         {
             return _genericService.GetAll();

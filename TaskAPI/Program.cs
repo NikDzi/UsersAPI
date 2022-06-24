@@ -20,6 +20,7 @@ builder.Services.AddScoped<IGenericService<User, UserRequest, LoginRequest>, Use
 builder.Services.AddScoped<IGenericService<Permission, PermissionRequest, LoginRequest>, PermissionService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

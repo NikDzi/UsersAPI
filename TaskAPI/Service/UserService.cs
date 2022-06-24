@@ -13,11 +13,13 @@ namespace TaskAPI.Service
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(DataContext context, IConfiguration configuration)
+        public UserService(DataContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public List<User> Delete(int id)
@@ -31,10 +33,13 @@ namespace TaskAPI.Service
             _context.SaveChanges();
             return GetAll();
         }
-
         public List<User> GetAll()
         {      // will populate database on first get call which is executed on angular app startup
-
+            var currentuser = string.Empty;
+            if (_httpContextAccessor.HttpContext!=null)
+            {
+                currentuser= _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            }
             if (!_context.Users.Any())
             {
                 SeedDataBase();
@@ -185,7 +190,8 @@ namespace TaskAPI.Service
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: cred);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
+            var returnjwt = '"' + jwt + '"';
+            return returnjwt;
         }
     }
 }
